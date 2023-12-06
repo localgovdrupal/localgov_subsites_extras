@@ -1,0 +1,51 @@
+<?php
+
+/**
+ * @file
+ * Contains localgov_menu_subsites.module.
+ */
+
+declare(strict_types=1);
+
+/**
+ * Implements hook_preprocess_node().
+ *
+ * When a node is a child menu item of a subsite homepage node, this finds the
+ * subsite homepage and inserts some of its properties into the template.
+ */
+function localgov_menu_subsites_preprocess_html(&$variables) {
+
+  /** @var \Drupal\localgov_menu_subsites\Service\SubsiteService $subSiteService */
+  $subSiteService = \Drupal::service('localgov_menu_subsites.service');
+
+  // If the current node is part of a subsite, $subsiteHomePage will be the
+  // subsite's homepage node. If it's not, it'll be null.
+  $theme = $subSiteService->getCurrentSubsiteTheme();
+  if ($theme) {
+    $variables['attributes']['class'][] = 'subsite';
+    $variables['attributes']['class'][] = 'color--' . $theme;
+  }
+}
+
+/**
+ * Implements hook_preprocess_page().
+ *
+ * When a node is a child menu item of a subsite homepage node, this finds the
+ * subsite homepage and inserts some of its properties into the template.
+ */
+function localgov_menu_subsites_preprocess_menu(&$variables) {
+
+  if ($variables['menu_name'] !== 'main') {
+    return;
+  }
+
+  /** @var \Drupal\localgov_menu_subsites\Service\SubsiteService $subSiteService */
+  $subSiteService = \Drupal::service('localgov_menu_subsites.service');
+
+  // If the current node is part of a subsite, $subsiteHomePage will be the
+  // subsite's homepage node. If it's not, it'll be null.
+  $subsiteHomePage = $subSiteService->getHomePage();
+  if ($subsiteHomePage) {
+    $variables['subsite_homepage_link'] = $subsiteHomePage->toLink();
+  }
+}

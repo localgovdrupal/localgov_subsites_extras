@@ -22,10 +22,10 @@ class SubsiteService {
   private MenuLinkManagerInterface $menuLinkService;
   private RouteMatchInterface $routeMatch;
   private ConfigFactory $configFactory;
-  private ?NodeInterface $subsiteHomePage = null;
+  private ?NodeInterface $subsiteHomePage;
   private bool $searched = false;
-  private array $subsiteTypes = [];
-  private string $themeField = '';
+  private ?array $subsiteTypes;
+  private ?string $themeField;
 
   public function __construct(
     EntityTypeManagerInterface $entityTypeManager,

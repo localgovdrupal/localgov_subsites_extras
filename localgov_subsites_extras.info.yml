@@ -1,4 +1,4 @@
-name: "LocalGov Menu Subsites"
+name: "LocalGov Subsites Extras"
 description: "Allows creation of subsites that use the menu system to determine hierarchy."
 package: "LocalGov"
 type: module

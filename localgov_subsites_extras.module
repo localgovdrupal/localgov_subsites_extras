@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Contains localgov_menu_subsites.module.
+ * Contains localgov_subsites_extras.module.
  */
 
 declare(strict_types=1);
@@ -13,10 +13,10 @@ declare(strict_types=1);
  * When a node is a child menu item of a subsite homepage node, this finds the
  * subsite homepage and inserts some of its properties into the template.
  */
-function localgov_menu_subsites_preprocess_html(&$variables) {
+function localgov_subsites_extras_preprocess_html(&$variables) {
 
-  /** @var \Drupal\localgov_menu_subsites\Service\SubsiteService $subSiteService */
-  $subSiteService = \Drupal::service('localgov_menu_subsites.service');
+  /** @var \Drupal\localgov_subsites_extras\Service\SubsiteService $subSiteService */
+  $subSiteService = \Drupal::service('localgov_subsites_extras.service');
 
   // If the current node is part of a subsite, $subsiteHomePage will be the
   // subsite's homepage node. If it's not, it'll be null.
@@ -33,14 +33,14 @@ function localgov_menu_subsites_preprocess_html(&$variables) {
  * When a node is a child menu item of a subsite homepage node, this finds the
  * subsite homepage and inserts some of its properties into the template.
  */
-function localgov_menu_subsites_preprocess_menu(&$variables) {
+function localgov_subsites_extras_preprocess_menu(&$variables) {
 
   if ($variables['menu_name'] !== 'main') {
     return;
   }
 
-  /** @var \Drupal\localgov_menu_subsites\Service\SubsiteService $subSiteService */
-  $subSiteService = \Drupal::service('localgov_menu_subsites.service');
+  /** @var \Drupal\localgov_subsites_extras\Service\SubsiteService $subSiteService */
+  $subSiteService = \Drupal::service('localgov_subsites_extras.service');
 
   // If the current node is part of a subsite, $subsiteHomePage will be the
   // subsite's homepage node. If it's not, it'll be null.

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\localgov_menu_subsites\Service;
+namespace Drupal\localgov_subsites_extras\Service;
 
 use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -58,7 +58,7 @@ class SubsiteService {
 
   public function getCurrentSubsiteTheme() {
 
-    $this->themeField = $this->configFactory->get('localgov_menu_subsites.settings')->get('theme_field');
+    $this->themeField = $this->configFactory->get('localgov_subsites_extras.settings')->get('theme_field');
 
     // If the current node is part of a subsite, $subsiteHomePage will be the
     // subsite's homepage node. If it's not, it'll be null.
@@ -139,7 +139,7 @@ class SubsiteService {
       return NULL;
     }
 
-    $this->subsiteTypes = $this->configFactory->get('localgov_menu_subsites.settings')->get('subsite_types');
+    $this->subsiteTypes = $this->configFactory->get('localgov_subsites_extras.settings')->get('subsite_types');
 
     $subsiteHomePage = $this->walkMenuTree($node);
 

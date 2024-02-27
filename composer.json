@@ -1,0 +1,8 @@
+{
+    "name": "localgovdrupal/localgov_subsites_extras",
+    "description": "Additional features for subsites in the LocalGovDrupal distribution.",
+    "type": "drupal-module",
+    "homepage": "https://github.com/localgovdrupal/localgov_subsites_extras",
+    "license": "GPL-2.0-or-later",
+    "minimum-stability": "dev"
+}

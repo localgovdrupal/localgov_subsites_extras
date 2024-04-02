@@ -1,5 +1,7 @@
 # LocalGov Subsites Extras
 
+@todo: Explain the use cae for this module.
+
 1) Enable the module.
 2) Add settings. There's currently no UI for this, so you have to add them to settings.php yourself. If you want to use the types and field provided by localgov_subsites, you can add this:
 ```

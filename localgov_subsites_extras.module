@@ -49,3 +49,29 @@ function localgov_subsites_extras_preprocess_menu(&$variables) {
     $variables['subsite_homepage_link'] = $subsiteHomePage->toLink();
   }
 }
+
+/**
+ * Implements hook_entity_bundle_create().
+ *
+ * When a new content type is created, this adds the subsite menu to its
+ * available menus.
+ */
+function localgov_subsites_extras_entity_bundle_create($entity_type_id, $bundle) {
+
+  if ($entity_type_id !== 'node') {
+    return;
+  }
+
+  /** @var \Drupal\Node\NodeTypeInterface $types */
+  $type = \Drupal::entityTypeManager()
+    ->getStorage('node_type')
+    ->load($bundle);
+
+  if ($type) {
+    $availableMenus = $type->getThirdPartySetting('menu_ui', 'available_menus', []);
+    $availableMenus[] = 'subsites';
+    $type->setThirdPartySetting('menu_ui', 'available_menus', $availableMenus);
+    $type->save();
+  }
+
+}

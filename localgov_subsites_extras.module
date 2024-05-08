@@ -68,7 +68,7 @@ function localgov_subsites_extras_entity_bundle_create($entity_type_id, $bundle)
     ->load($bundle);
 
   if ($type) {
-    $availableMenus = $type->getThirdPartySetting('menu_ui', 'available_menus', []);
+    $availableMenus = $type->getThirdPartySetting('menu_ui', 'available_menus', ['main']);
     $availableMenus[] = 'subsites';
     $type->setThirdPartySetting('menu_ui', 'available_menus', $availableMenus);
     $type->save();

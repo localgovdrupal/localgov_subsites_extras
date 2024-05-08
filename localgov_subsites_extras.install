@@ -14,7 +14,7 @@ function localgov_subsites_extras_install() {
     ->loadMultiple();
 
   foreach ($types as $type) {
-    $availableMenus = $type->getThirdPartySetting('menu_ui', 'available_menus', []);
+    $availableMenus = $type->getThirdPartySetting('menu_ui', 'available_menus', ['main']);
     $availableMenus[] = 'subsites';
     $type->setThirdPartySetting('menu_ui', 'available_menus', $availableMenus);
     $type->save();

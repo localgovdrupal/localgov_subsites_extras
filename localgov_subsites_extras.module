@@ -22,8 +22,8 @@ function localgov_subsites_extras_preprocess_html(&$variables) {
   // subsite's homepage node. If it's not, it'll be null.
   $theme = $subSiteService->getCurrentSubsiteTheme();
   if ($theme) {
-    $variables['attributes']['class'][] = 'subsite';
-    $variables['attributes']['class'][] = 'color--' . $theme;
+    $variables['attributes']['class'][] = 'subsite-extra';
+    $variables['attributes']['class'][] = 'subsite-extra--color-' . $theme;
   }
 }
 

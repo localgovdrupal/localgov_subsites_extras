@@ -62,7 +62,7 @@ function localgov_subsites_extras_entity_bundle_create($entity_type_id, $bundle)
     return;
   }
 
-  /** @var \Drupal\Node\NodeTypeInterface $types */
+  /** @var \Drupal\Node\NodeTypeInterface $type */
   $type = \Drupal::entityTypeManager()
     ->getStorage('node_type')
     ->load($bundle);

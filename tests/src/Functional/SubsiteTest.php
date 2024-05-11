@@ -20,8 +20,8 @@ class SubsiteTest extends BrowserTestBase {
    * {@inheritdoc}
    */
   protected static $modules = [
-    'localgov_subsites',
     'localgov_subsites_extras',
+    'localgov_subsites',
   ];
 
   /**

@@ -56,7 +56,12 @@ class SubsiteService {
     return $this->subsiteHomePage;
   }
 
-  public function getCurrentSubsiteTheme() {
+  /**
+   * Gets the theme of the current subsite, if there is one.
+   *
+   * NB that this is not a drupal theme. It's the chosen colour scheme, etc.
+   */
+  public function getCurrentSubsiteTheme(): ?string {
 
     $this->themeField = $this->configFactory->get('localgov_subsites_extras.settings')->get('theme_field');
 
@@ -70,9 +75,9 @@ class SubsiteService {
     return NULL;
   }
 
- /**
-  * Is the given node a subsite root node?
-  */
+  /**
+   * Is the given node a subsite root node?
+   */
   private function isSubsiteType(NodeInterface $node): bool {
     return in_array($node->bundle(), $this->subsiteTypes);
   }

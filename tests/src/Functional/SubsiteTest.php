@@ -20,8 +20,8 @@ class SubsiteTest extends BrowserTestBase {
    * {@inheritdoc}
    */
   protected static $modules = [
-    'localgov_subsites_extras',
     'localgov_subsites',
+    'localgov_subsites_extras',
   ];
 
   /**
@@ -67,7 +67,7 @@ class SubsiteTest extends BrowserTestBase {
     $this->drupalGet('/node/' . $childNode->id());
 
     // Check the class for the color scheme is on the body of the child node.
-    $this->assertSession()->elementAttributeContains('xpath', '/body', 'class', 'color--theme_a');
+    $this->assertSession()->elementAttributeContains('xpath', '/body', 'class', 'subsite-extra--color-theme_a');
   }
 
 }

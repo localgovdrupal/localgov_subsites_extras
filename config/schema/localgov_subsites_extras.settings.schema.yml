@@ -1,0 +1,12 @@
+localgov_subsites_extras.settings:
+  type: config_entity
+  label: 'Subsites extras settings'
+  mapping:
+    subsite_types:
+      type: sequence
+      label: 'Content types that can be subsites'
+      sequence:
+        type: string
+        label: 'Content type'
+    theme_field:
+      type: string

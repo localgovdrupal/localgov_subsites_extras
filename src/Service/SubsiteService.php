@@ -24,7 +24,7 @@ class SubsiteService {
   private ConfigFactory $configFactory;
   private ?NodeInterface $subsiteHomePage;
   private bool $searched = false;
-  private ?array $subsiteTypes;
+  private ?array $subsiteTypes = [];
   private ?string $themeField;
 
   public function __construct(
@@ -144,7 +144,10 @@ class SubsiteService {
       return NULL;
     }
 
-    $this->subsiteTypes = $this->configFactory->get('localgov_subsites_extras.settings')->get('subsite_types');
+    $subsiteTypes = $this->configFactory->get('localgov_subsites_extras.settings')->get('subsite_types');
+    if (is_array($subsiteTypes)) {
+      $this->subsiteTypes = $subsiteTypes;
+    }
 
     $subsiteHomePage = $this->walkMenuTree($node);
 

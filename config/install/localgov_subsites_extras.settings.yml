@@ -1,6 +1,3 @@
 subsite_types:
   - 'localgov_subsites_overview'
 theme_field: 'localgov_subsites_theme'
-dependencies:
-  module:
-    - localgov_subsites

@@ -108,10 +108,9 @@ class SubsiteService {
     if (!empty($result)) {
       $menuLink = reset($result);
       $parentMenuLinkID = $menuLink->getParent();
-
       if ($parentMenuLinkID) {
         $parentNode = $this->loadNodeForMenuLink($parentMenuLinkID);
-        return $this->walkMenuTree($parentNode);
+        return $parentNode ? $this->walkMenuTree($parentNode) : NULL;
       }
     }
     return NULL;

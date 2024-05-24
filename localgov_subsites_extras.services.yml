@@ -1,4 +1,9 @@
 services:
   localgov_subsites_extras.service:
     class: Drupal\localgov_subsites_extras\Service\SubsiteService
-    arguments: ['@entity_type.manager', '@plugin.manager.menu.link', '@current_route_match', '@config.factory']
+    arguments:
+      - '@entity_type.manager'
+      - '@plugin.manager.menu.link'
+      - '@current_route_match'
+      - '@config.factory'
+      - '@module_handler'

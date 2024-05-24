@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-use \Drupal\node\NodeInterface;
+use Drupal\node\NodeInterface;
 
 /**
  * Implements hook_preprocess_node().
@@ -71,8 +71,9 @@ function localgov_subsites_extras_entity_bundle_create($entity_type_id, $bundle)
     $type->setThirdPartySetting('menu_ui', 'available_menus', $availableMenus);
     $type->save();
   }
-
 }
+
+// phpcs:disable
 
 // Ideally, we want this hook in localgov_directories.
 // Wrap it for now so we can move it there cleanly.
@@ -105,3 +106,5 @@ if (!function_exists('localgov_guides_subsites_extra_current_node_alter')) {
     }
   }
 }
+
+// phpcs:enable

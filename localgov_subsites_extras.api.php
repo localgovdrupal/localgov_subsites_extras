@@ -38,6 +38,7 @@ function hook_subsites_extra_current_node_alter(?NodeInterface &$node) {
     }
   }
 }
+
 /**
  * @} End of "addtogroup hooks".
  */

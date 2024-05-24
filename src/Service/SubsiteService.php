@@ -16,33 +16,34 @@ use Drupal\node\NodeInterface;
  */
 class SubsiteService {
 
-  // Disable phpcs for a bit, so we don't have to add a load of stuff that's
-  // made redundant by type hints.
-  // phpcs:disable
-  private ConfigFactory $configFactory;
-  private EntityTypeManagerInterface $entityTypeManager;
-  private MenuLinkManagerInterface $menuLinkService;
-  private ModuleHandlerInterface $moduleHandler;
-  private RouteMatchInterface $routeMatch;
+  /**
+   * Subsite homepage.
+   *
+   * @var \Drupal\node\NodeInterface|null
+   */
   private ?NodeInterface $subsiteHomePage;
-  private bool $searched = false;
+
+  /**
+   * Searched flag.
+   *
+   * @var bool
+   */
+  private bool $searched = FALSE;
+
+  /**
+   * Subsite content types.
+   *
+   * @var array|null
+   */
   private ?array $subsiteTypes = [];
-  private ?string $themeField;
 
   public function __construct(
-    ConfigFactory $configFactory,
-    EntityTypeManagerInterface $entityTypeManager,
-    MenuLinkManagerInterface $menuLinkService,
-    ModuleHandlerInterface $moduleHandler,
-    RouteMatchInterface $routeMatch,
-  ) {
-    $this->configFactory = $configFactory;
-    $this->entityTypeManager = $entityTypeManager;
-    $this->menuLinkService = $menuLinkService;
-    $this->moduleHandler = $moduleHandler;
-    $this->routeMatch = $routeMatch;
-  }
-  // phpcs:enable
+    private ConfigFactory $configFactory,
+    private EntityTypeManagerInterface $entityTypeManager,
+    private MenuLinkManagerInterface $menuLinkService,
+    private ModuleHandlerInterface $moduleHandler,
+    private RouteMatchInterface $routeMatch,
+  ) {}
 
   /**
    * Get the subsite homepage node if we're in a subsite.
@@ -67,13 +68,13 @@ class SubsiteService {
    */
   public function getCurrentSubsiteTheme(): ?string {
 
-    $this->themeField = $this->configFactory->get('localgov_subsites_extras.settings')->get('theme_field');
+    $themeField = $this->configFactory->get('localgov_subsites_extras.settings')->get('theme_field');
 
     // If the current node is part of a subsite, $subsiteHomePage will be the
     // subsite's homepage node. If it's not, it'll be null.
     $subsiteHomePage = $this->getHomePage();
     if ($subsiteHomePage) {
-      return $subsiteHomePage->get($this->themeField)->value;
+      return $subsiteHomePage->get($themeField)->value;
     }
 
     return NULL;

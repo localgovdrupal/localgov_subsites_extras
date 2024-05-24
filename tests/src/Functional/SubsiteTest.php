@@ -27,7 +27,7 @@ class SubsiteTest extends BrowserTestBase {
   /**
    * Creates a menu link to the given node in the subsites menu.
    */
-  protected function createMenuLinkForNode($node, $parentLink = null) {
+  protected function createMenuLinkForNode($node, $parentLink = NULL) {
     $properties = [
       'link' => [['uri' => 'entity:node/' . $node->id()]],
       'title' => $node->label(),
@@ -96,4 +96,5 @@ class SubsiteTest extends BrowserTestBase {
     // Check the class for the color scheme is on the body of the child node.
     $this->assertSession()->elementAttributeContains('xpath', '/body', 'class', 'subsite-extra--color-theme_a');
   }
+
 }

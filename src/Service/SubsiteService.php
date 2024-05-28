@@ -90,7 +90,7 @@ class SubsiteService {
   /**
    * Walks up the menu tree to look for a subsite homepage node.
    */
-  private function walkMenuTree(NodeInterface $node) {
+  private function walkMenuTree(NodeInterface $node): ?NodeInterface {
 
     if ($this->isSubsiteType($node)) {
       return $node;
@@ -101,10 +101,9 @@ class SubsiteService {
     if (!empty($result)) {
       $menuLink = reset($result);
       $parentMenuLinkID = $menuLink->getParent();
-
       if ($parentMenuLinkID) {
         $parentNode = $this->loadNodeForMenuLink($parentMenuLinkID);
-        return $this->walkMenuTree($parentNode);
+        return $parentNode ? $this->walkMenuTree($parentNode) : NULL;
       }
     }
     return NULL;
@@ -113,7 +112,7 @@ class SubsiteService {
   /**
    * Loads the node for the supplied menu link ID.
    */
-  private function loadNodeForMenuLink($menuLinkContentID) {
+  private function loadNodeForMenuLink($menuLinkContentID): ?NodeInterface {
     $menuLink = $this->menuLinkService->createInstance($menuLinkContentID);
     $pluginDefinition = $menuLink->getPluginDefinition();
 

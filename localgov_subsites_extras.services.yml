@@ -2,3 +2,9 @@ services:
   localgov_subsites_extras.service:
     class: Drupal\localgov_subsites_extras\Service\SubsiteService
     arguments: ['@entity_type.manager', '@plugin.manager.menu.link', '@current_route_match', '@config.factory']
+  cache_context.subsites:
+    class: Drupal\localgov_subsites_extras\Cache\SubsitesCacheContext
+    arguments:
+      - '@localgov_subsites_extras.service'
+    tags:
+      - { name: cache.context }

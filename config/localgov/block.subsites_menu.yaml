@@ -1,0 +1,12 @@
+plugin: 'system_menu_block:subsites'
+region: subsites_menu
+status: true
+weight: 1
+settings:
+  label: 'Subsites menu'
+  label_display: '0'
+  provider: system
+  level: 2
+  depth: 1
+  expand_all_items: false
+visibility: {  }

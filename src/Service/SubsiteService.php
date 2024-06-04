@@ -144,7 +144,7 @@ class SubsiteService {
       }
     }
 
-    $this->moduleHandler->alter('subsites_extra_current_node', $node);
+    $this->moduleHandler->alter('localgov_subsites_extras_current_node', $node);
 
     if (!$node instanceof NodeInterface) {
       return NULL;

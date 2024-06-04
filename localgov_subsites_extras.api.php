@@ -30,7 +30,7 @@ use Drupal\node\NodeInterface;
  * directories, etc) to swop out the current node for a different node, which is
  * in the menu and therefore part of a subsite.
  */
-function hook_subsites_extra_current_node_alter(?NodeInterface &$node) {
+function hook_localgov_subsites_extras_current_node_alter(?NodeInterface &$node) {
   if ($node instanceof NodeInterface && $node->hasField('field_parent')) {
     $parent = $node->field_parent->entity;
     if ($parent instanceof NodeInterface) {

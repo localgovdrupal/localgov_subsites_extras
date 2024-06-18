@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-use Drupal\node\NodeInterface;
+include 'localgov_subsites_extras_hooks.inc';
 
 /**
  * Implements hook_preprocess_node().
@@ -72,39 +72,3 @@ function localgov_subsites_extras_entity_bundle_create($entity_type_id, $bundle)
     $type->save();
   }
 }
-
-// phpcs:disable
-
-// Ideally, we want this hook in localgov_directories.
-// Wrap it for now so we can move it there cleanly.
-if (!function_exists('localgov_directories_localgov_subsites_extras_current_node_alter')) {
-  /**
-   * Implements hook_localgov_subsites_extras_current_node_alter().
-   */
-  function localgov_directories_localgov_subsites_extras_current_node_alter(?NodeInterface &$node) {
-    if ($node instanceof NodeInterface && $node->hasField('localgov_directory_channels')) {
-      $directoryChannel = $node->localgov_directory_channels->entity;
-      if ($directoryChannel instanceof NodeInterface) {
-        $node = $directoryChannel;
-      }
-    }
-  }
-}
-
-// Ideally, we want this hook in localgov_guides.
-// Wrap it for now so we can move it there cleanly.
-if (!function_exists('localgov_guides_localgov_subsites_extras_current_node_alter')) {
-  /**
-   * Implements hook_localgov_subsites_extras_current_node_alter().
-   */
-  function localgov_guides_localgov_subsites_extras_current_node_alter(?NodeInterface &$node) {
-    if ($node instanceof NodeInterface && $node->hasField('localgov_guides_parent')) {
-      $guideParent = $node->localgov_guides_parent->entity;
-      if ($guideParent instanceof NodeInterface) {
-        $node = $guideParent;
-      }
-    }
-  }
-}
-
-// phpcs:enable

@@ -2,8 +2,6 @@
 
 namespace Drupal\localgov_subsites_extras\Cache;
 
-use Drupal\node\NodeInterface;
-
 /**
  * Defines the subsites theme cache context service.
  *
@@ -24,4 +22,5 @@ class SubsitesThemeCacheContext extends SubsitesBaseCacheContext {
   public function getContext(): string {
     return $this->subsiteService->getCurrentSubsiteTheme() ?? '';
   }
+
 }

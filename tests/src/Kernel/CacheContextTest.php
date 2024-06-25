@@ -57,7 +57,7 @@ class CacheContextTest extends KernelTestBase {
    *
    * Returns cache context name, and the expected value.
    */
-  function cacheContextProvider() {
+  public function cacheContextProvider() {
     yield ['subsites', 127];
     yield ['subsites.homepage', 127];
     yield ['subsites.theme', 'teal'];

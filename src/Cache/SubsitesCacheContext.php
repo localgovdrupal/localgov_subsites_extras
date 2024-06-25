@@ -2,25 +2,14 @@
 
 namespace Drupal\localgov_subsites_extras\Cache;
 
-use Drupal\Core\Cache\CacheableMetadata;
-use Drupal\Core\Cache\Context\CacheContextInterface;
-use Drupal\localgov_subsites_extras\Service\SubsiteService;
+use Drupal\node\NodeInterface;
 
 /**
  * Defines the subsites cache context service.
  *
  * Cache context ID: 'subsites'.
  */
-class SubsitesCacheContext implements CacheContextInterface {
-
-  /**
-   * Constructor.
-   *
-   * @param \Drupal\localgov_subsites_extras\Service\SubsiteService $subsiteService
-   *   The localgov_subsites_extras.service service.
-   */
-  public function __construct(protected SubsiteService $subsiteService) {
-  }
+class SubsitesCacheContext extends SubsitesBaseCacheContext {
 
   /**
    * {@inheritdoc}
@@ -33,14 +22,7 @@ class SubsitesCacheContext implements CacheContextInterface {
    * {@inheritdoc}
    */
   public function getContext(): string {
-    return $this->subsiteService->getCurrentSubsiteTheme() ?? '';
+    $subsiteHomePage = $this->subsiteService->getHomePage();
+    return $subsiteHomePage instanceof NodeInterface ? $subsiteHomePage->id() : '';
   }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getCacheableMetadata(): CacheableMetadata {
-    return new CacheableMetadata();
-  }
-
 }

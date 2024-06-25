@@ -8,3 +8,15 @@ services:
       - '@localgov_subsites_extras.service'
     tags:
       - { name: cache.context }
+  cache_context.subsites.theme:
+    class: Drupal\localgov_subsites_extras\Cache\SubsitesThemeCacheContext
+    arguments:
+      - '@localgov_subsites_extras.service'
+    tags:
+      - { name: cache.context }
+  cache_context.subsites.homepage:
+    class: Drupal\localgov_subsites_extras\Cache\SubsitesHomePageCacheContext
+    arguments:
+      - '@localgov_subsites_extras.service'
+    tags:
+      - { name: cache.context }

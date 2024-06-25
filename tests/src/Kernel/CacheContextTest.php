@@ -25,14 +25,21 @@ class CacheContextTest extends KernelTestBase {
 
   /**
    * Node mock.
+   *
+   * @var \Drupal\node\NodeInterface
    */
   protected $node;
 
   /**
    * Subsite service mock.
+   *
+   * @var \Drupal\localgov_subsites_extras\Service\SubsiteServiceInterface
    */
   protected $subSiteService;
 
+  /**
+   * {@inheritdoc}
+   */
   public function setUp(): void {
     parent::setUp();
     $this->node = $this->createMock(NodeInterface::class);

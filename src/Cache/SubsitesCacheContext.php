@@ -25,4 +25,5 @@ class SubsitesCacheContext extends SubsitesBaseCacheContext {
     $subsiteHomePage = $this->subsiteService->getHomePage();
     return $subsiteHomePage instanceof NodeInterface ? $subsiteHomePage->id() : '';
   }
+
 }

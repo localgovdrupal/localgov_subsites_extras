@@ -4,7 +4,6 @@ namespace Drupal\localgov_subsites_extras\Cache;
 
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Cache\Context\CacheContextInterface;
-use Drupal\localgov_subsites_extras\Service\SubsiteService;
 use Drupal\localgov_subsites_extras\Service\SubsiteServiceInterface;
 
 /**

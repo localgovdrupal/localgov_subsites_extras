@@ -15,7 +15,7 @@ declare(strict_types=1);
  */
 function localgov_subsites_extras_preprocess_html(&$variables) {
 
-  /** @var \Drupal\localgov_subsites_extras\Service\SubsiteService $subSiteService */
+  /** @var \Drupal\localgov_subsites_extras\Service\SubsiteServiceInterface $subSiteService */
   $subSiteService = \Drupal::service('localgov_subsites_extras.service');
 
   // If the current node is part of a subsite, $subsiteHomePage will be the
@@ -35,7 +35,7 @@ function localgov_subsites_extras_preprocess_html(&$variables) {
  */
 function localgov_subsites_extras_preprocess_menu(&$variables) {
 
-  /** @var \Drupal\localgov_subsites_extras\Service\SubsiteService $subSiteService */
+  /** @var \Drupal\localgov_subsites_extras\Service\SubsiteServiceInterface $subSiteService */
   $subSiteService = \Drupal::service('localgov_subsites_extras.service');
 
   // If the current node is part of a subsite, $subsiteHomePage will be the

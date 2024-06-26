@@ -13,7 +13,7 @@ use Drupal\node\NodeInterface;
 /**
  * Subsite service.
  */
-class SubsiteService {
+class SubsiteService implements SubsiteServiceInterface {
 
   // Disable phpcs for a bit, so we don't have to add a load of stuff that's
   // made redundant by type hints.
@@ -41,10 +41,7 @@ class SubsiteService {
   // phpcs:enable
 
   /**
-   * Get the subsite homepage node if we're in a subsite.
-   *
-   * This will only call ::findHomePage() once per request, so it's fine to call
-   * from multiple preprocess functions without a performance penalty.
+   * {@inheritDoc}
    */
   public function getHomePage(): ?NodeInterface {
 
@@ -57,9 +54,7 @@ class SubsiteService {
   }
 
   /**
-   * Gets the theme of the current subsite, if there is one.
-   *
-   * NB that this is not a drupal theme. It's the chosen colour scheme, etc.
+   * {@inheritDoc}
    */
   public function getCurrentSubsiteTheme(): ?string {
 

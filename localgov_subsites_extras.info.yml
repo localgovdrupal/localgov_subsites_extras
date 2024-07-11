@@ -6,3 +6,4 @@ core_version_requirement: ">=10"
 dependencies:
   - drupal:menu_ui
   - drupal:node
+  - localgov_subsites:localgov_subsites

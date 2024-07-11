@@ -2,3 +2,21 @@ services:
   localgov_subsites_extras.service:
     class: Drupal\localgov_subsites_extras\Service\SubsiteService
     arguments: ['@config.factory', '@entity_type.manager', '@plugin.manager.menu.link', '@module_handler', '@current_route_match']
+  cache_context.subsites:
+    class: Drupal\localgov_subsites_extras\Cache\SubsitesCacheContext
+    arguments:
+      - '@localgov_subsites_extras.service'
+    tags:
+      - { name: cache.context }
+  cache_context.subsites.theme:
+    class: Drupal\localgov_subsites_extras\Cache\SubsitesThemeCacheContext
+    arguments:
+      - '@localgov_subsites_extras.service'
+    tags:
+      - { name: cache.context }
+  cache_context.subsites.homepage:
+    class: Drupal\localgov_subsites_extras\Cache\SubsitesHomePageCacheContext
+    arguments:
+      - '@localgov_subsites_extras.service'
+    tags:
+      - { name: cache.context }

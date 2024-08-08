@@ -15,7 +15,7 @@ interface SubsiteServiceInterface {
    * This will only call ::findHomePage() once per request, so it's fine to call
    * from multiple preprocess functions without a performance penalty.
    */
-  public function getHomePage(): ?NodeInterface;
+  public function getHomePage(?NodeInterface $node = NULL): ?NodeInterface;
 
   /**
    * Gets the theme of the current subsite, if there is one.

@@ -74,7 +74,7 @@ class SubsiteService implements SubsiteServiceInterface {
    * Is the given node a subsite root node?
    */
   private function isSubsiteType(NodeInterface $node): bool {
-    return in_array($node->bundle(), $this->subsiteTypes);
+    return in_array($node->bundle(), $this->subsiteTypes, strict: TRUE);
   }
 
   /**

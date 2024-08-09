@@ -27,7 +27,7 @@ class SubsiteTest extends BrowserTestBase {
   /**
    * Test that we can set up a subsite using this module.
    */
-  public function testLoadAdminView() {
+  public function testChildPageAttributeAndPathAlias() {
 
     $user = $this->createUser([], 'admintestuser', TRUE);
 
@@ -63,6 +63,11 @@ class SubsiteTest extends BrowserTestBase {
       'menu_name' => 'subsites',
       'parent' => 'menu_link_content:' . $parentMenuLink->uuid(),
     ])->save();
+
+    $parentNodePathAlias = $parentNode->path?->alias ?? '/something';
+    $childNodePathAlias = $childNode->path?->alias ?? '/completely/different';
+    $fulfillsExpectedPathAliasPattern = str_starts_with($childNodePathAlias, $parentNodePathAlias);
+    $this->assert($fulfillsExpectedPathAliasPattern);
 
     $this->drupalGet('/node/' . $childNode->id());
 

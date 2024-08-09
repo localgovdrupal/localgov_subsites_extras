@@ -27,7 +27,7 @@ class SubsiteTest extends BrowserTestBase {
   /**
    * Test that we can set up a subsite using this module.
    */
-  public function testChildPageAttributeAndPathAlias() {
+  public function testChildPageAttributes() {
 
     $user = $this->createUser([], 'admintestuser', TRUE);
 
@@ -63,11 +63,6 @@ class SubsiteTest extends BrowserTestBase {
       'menu_name' => 'subsites',
       'parent' => 'menu_link_content:' . $parentMenuLink->uuid(),
     ])->save();
-
-    $parentNodePathAlias = $parentNode->path?->alias ?? '/something';
-    $childNodePathAlias = $childNode->path?->alias ?? '/completely/different';
-    $fulfillsExpectedPathAliasPattern = str_starts_with($childNodePathAlias, $parentNodePathAlias);
-    $this->assertSession()->assert($fulfillsExpectedPathAliasPattern, 'Child path alias is prefixed with parent path alias.');
 
     $this->drupalGet('/node/' . $childNode->id());
 

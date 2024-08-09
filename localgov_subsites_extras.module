@@ -79,7 +79,6 @@ function localgov_subsites_extras_entity_bundle_create($entity_type_id, $bundle)
  *
  * Prepends Subsite homepage path alias to child page path aliases.
  *
- * @todo Fix bulk update scenario.
  * @todo Automated tests.
  */
 function localgov_subsites_extras_pathauto_alias_alter(&$alias, array &$context) {
@@ -94,8 +93,13 @@ function localgov_subsites_extras_pathauto_alias_alter(&$alias, array &$context)
   if (!$subsite_home instanceof NodeInterface) {
     return;
   }
-  $subsite_home_path = $subsite_home->toUrl()->toString();
 
+  $is_child_page = $subsite_home->id() !== $src_node->id();
+  if (!$is_child_page) {
+    return;
+  }
+
+  $subsite_home_path = $subsite_home->toUrl()->toString();
   $has_subsite_alias_prefix = str_starts_with($alias, $subsite_home_path);
   if ($has_subsite_alias_prefix) {
     return;

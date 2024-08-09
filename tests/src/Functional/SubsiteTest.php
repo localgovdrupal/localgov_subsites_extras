@@ -67,7 +67,7 @@ class SubsiteTest extends BrowserTestBase {
     $parentNodePathAlias = $parentNode->path?->alias ?? '/something';
     $childNodePathAlias = $childNode->path?->alias ?? '/completely/different';
     $fulfillsExpectedPathAliasPattern = str_starts_with($childNodePathAlias, $parentNodePathAlias);
-    $this->assert($fulfillsExpectedPathAliasPattern);
+    $this->assertSession()->assert($fulfillsExpectedPathAliasPattern, 'Child path alias is prefixed with parent path alias.');
 
     $this->drupalGet('/node/' . $childNode->id());
 

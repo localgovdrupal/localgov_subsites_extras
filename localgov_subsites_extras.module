@@ -96,8 +96,9 @@ function localgov_subsites_extras_pathauto_alias_alter(&$alias, array &$context)
     return;
   }
 
-  $subsite_home_path_alias = $subsite_home->path?->alias;
-  if (is_null($subsite_home_path_alias)) {
+  $subsite_home_path_alias        = $subsite_home->toUrl()->toString();
+  $has_no_subsite_home_path_alias = $subsite_home_path_alias === "/node/{$subsite_home->id()}";
+  if ($has_no_subsite_home_path_alias) {
     return;
   }
 

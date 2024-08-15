@@ -14,6 +14,10 @@ interface SubsiteServiceInterface {
    *
    * This will only call ::findHomePage() once per request, so it's fine to call
    * from multiple preprocess functions without a performance penalty.
+   *
+   * @param \Drupal\node\NodeInterface $node
+   *   (optional) Useful for determining the Subsite homepage for a given child
+   *   page.
    */
   public function getHomePage(?NodeInterface $node = NULL): ?NodeInterface;
 

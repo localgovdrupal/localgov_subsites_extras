@@ -6,6 +6,7 @@ namespace Drupal\localgov_subsites_extras\Service;
 
 use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Menu\MenuLinkManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\node\NodeInterface;
@@ -15,30 +16,34 @@ use Drupal\node\NodeInterface;
  */
 class SubsiteService implements SubsiteServiceInterface {
 
-  // Disable phpcs for a bit, so we don't have to add a load of stuff that's
-  // made redundant by type hints.
-  // phpcs:disable
-  private EntityTypeManagerInterface $entityTypeManager;
-  private MenuLinkManagerInterface $menuLinkService;
-  private RouteMatchInterface $routeMatch;
-  private ConfigFactory $configFactory;
+  /**
+   * Subsite homepage.
+   *
+   * @var \Drupal\node\NodeInterface|null
+   */
   private ?NodeInterface $subsiteHomePage;
-  private bool $searched = false;
+
+  /**
+   * Searched flag.
+   *
+   * @var bool
+   */
+  private bool $searched = FALSE;
+
+  /**
+   * Subsite content types.
+   *
+   * @var array|null
+   */
   private ?array $subsiteTypes = [];
-  private ?string $themeField;
 
   public function __construct(
-    EntityTypeManagerInterface $entityTypeManager,
-    MenuLinkManagerInterface $menuLinkService,
-    RouteMatchInterface $routeMatch,
-    ConfigFactory $configFactory
-  ) {
-    $this->entityTypeManager = $entityTypeManager;
-    $this->menuLinkService = $menuLinkService;
-    $this->routeMatch = $routeMatch;
-    $this->configFactory = $configFactory;
-  }
-  // phpcs:enable
+    private ConfigFactory $configFactory,
+    private EntityTypeManagerInterface $entityTypeManager,
+    private MenuLinkManagerInterface $menuLinkService,
+    private ModuleHandlerInterface $moduleHandler,
+    private RouteMatchInterface $routeMatch,
+  ) {}
 
   /**
    * {@inheritDoc}
@@ -58,13 +63,13 @@ class SubsiteService implements SubsiteServiceInterface {
    */
   public function getCurrentSubsiteTheme(): ?string {
 
-    $this->themeField = $this->configFactory->get('localgov_subsites_extras.settings')->get('theme_field');
+    $themeField = $this->configFactory->get('localgov_subsites_extras.settings')->get('theme_field');
 
     // If the current node is part of a subsite, $subsiteHomePage will be the
     // subsite's homepage node. If it's not, it'll be null.
     $subsiteHomePage = $this->getHomePage();
     if ($subsiteHomePage) {
-      return $subsiteHomePage->get($this->themeField)->value;
+      return $subsiteHomePage->get($themeField)->value;
     }
 
     return NULL;
@@ -80,7 +85,7 @@ class SubsiteService implements SubsiteServiceInterface {
   /**
    * Walks up the menu tree to look for a subsite homepage node.
    */
-  private function walkMenuTree(NodeInterface $node) {
+  private function walkMenuTree(NodeInterface $node): ?NodeInterface {
 
     if ($this->isSubsiteType($node)) {
       return $node;
@@ -91,10 +96,9 @@ class SubsiteService implements SubsiteServiceInterface {
     if (!empty($result)) {
       $menuLink = reset($result);
       $parentMenuLinkID = $menuLink->getParent();
-
       if ($parentMenuLinkID) {
         $parentNode = $this->loadNodeForMenuLink($parentMenuLinkID);
-        return $this->walkMenuTree($parentNode);
+        return $parentNode ? $this->walkMenuTree($parentNode) : NULL;
       }
     }
     return NULL;
@@ -103,7 +107,7 @@ class SubsiteService implements SubsiteServiceInterface {
   /**
    * Loads the node for the supplied menu link ID.
    */
-  private function loadNodeForMenuLink($menuLinkContentID) {
+  private function loadNodeForMenuLink($menuLinkContentID): ?NodeInterface {
     $menuLink = $this->menuLinkService->createInstance($menuLinkContentID);
     $pluginDefinition = $menuLink->getPluginDefinition();
 
@@ -135,6 +139,8 @@ class SubsiteService implements SubsiteServiceInterface {
       }
     }
 
+    $this->moduleHandler->alter('localgov_subsites_extras_current_node', $node);
+
     if (!$node instanceof NodeInterface) {
       return NULL;
     }
@@ -144,16 +150,7 @@ class SubsiteService implements SubsiteServiceInterface {
       $this->subsiteTypes = $subsiteTypes;
     }
 
-    $subsiteHomePage = $this->walkMenuTree($node);
-
-    // @todo Move this out to an event or hook or something.
-    if (empty($subsiteHomePage) && $node->getType() === 'localgov_directories_page') {
-      /** @var \Drupal\node\NodeInterface $directoryChannel */
-      $directoryChannel = $node->localgov_directory_channels->entity;
-      $subsiteHomePage = $this->walkMenuTree($directoryChannel);
-    }
-
-    return $subsiteHomePage;
+    return $this->walkMenuTree($node);
   }
 
 }

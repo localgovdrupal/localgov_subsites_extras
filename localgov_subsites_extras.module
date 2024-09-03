@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 use Drupal\node\NodeInterface;
 
+include 'localgov_subsites_extras_hooks.inc';
+
 /**
  * Implements hook_preprocess_node().
  *
@@ -71,7 +73,6 @@ function localgov_subsites_extras_entity_bundle_create($entity_type_id, $bundle)
     $type->setThirdPartySetting('menu_ui', 'available_menus', $availableMenus);
     $type->save();
   }
-
 }
 
 /**
@@ -86,7 +87,7 @@ function localgov_subsites_extras_pathauto_alias_alter(&$alias, array &$context)
   }
 
   $src_node = $context['data']['node'];
-  $subsite_home = Drupal::service('localgov_subsites_extras.service')->getHomePage($src_node);
+  $subsite_home = \Drupal::service('localgov_subsites_extras.service')->getHomePage($src_node);
   if (!$subsite_home instanceof NodeInterface) {
     return;
   }

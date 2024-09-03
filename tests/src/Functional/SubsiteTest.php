@@ -3,7 +3,6 @@
 namespace Drupal\Tests\localgov_subsites_extras\Functional;
 
 use Drupal\menu_link_content\Entity\MenuLinkContent;
-use Drupal\node\Entity\Node;
 use Drupal\Tests\BrowserTestBase;
 
 /**
@@ -22,49 +21,77 @@ class SubsiteTest extends BrowserTestBase {
   protected static $modules = [
     'localgov_subsites',
     'localgov_subsites_extras',
+    'localgov_guides',
   ];
 
   /**
-   * Test that we can set up a subsite using this module.
+   * Creates a menu link to the given node in the subsites menu.
    */
-  public function testLoadAdminView() {
+  protected function createMenuLinkForNode($node, $parentLink = NULL) {
+    $properties = [
+      'link' => [['uri' => 'entity:node/' . $node->id()]],
+      'title' => $node->label(),
+      'menu_name' => 'subsites',
+    ];
+    if ($parentLink instanceof MenuLinkContent) {
+      $properties['parent'] = 'menu_link_content:' . $parentLink->uuid();
+    }
+    $menuLink = MenuLinkContent::create($properties);
+    $menuLink->save();
+    return $menuLink;
+  }
 
-    $user = $this->createUser([], 'admintestuser', TRUE);
+  /**
+   * Test that we can set up a subsite using this module.
+   *
+   * Structure is a single subsite page under a subsite overview.
+   */
+  public function testSubsitePage() {
 
-    // "theme_a" is the only default value in a fresh install of
-    // localgov_subsites.
-    $parentNode = Node::create([
+    // "theme_a" is the only value in a fresh install of localgov_subsites.
+    $parentNode = $this->createNode([
       'type' => 'localgov_subsites_overview',
-      'title' => $this->randomMachineName(),
-      'uid' => $user->id(),
-      'status' => 1,
       'localgov_subsites_theme' => 'theme_a',
     ]);
-    $parentNode->save();
+    $parentMenuLink = $this->createMenuLinkForNode($parentNode);
 
-    $parentMenuLink = MenuLinkContent::create([
-      'link' => [['uri' => 'entity:node/' . $parentNode->id()]],
-      'title' => $parentNode->label(),
-      'menu_name' => 'subsites',
-    ]);
-    $parentMenuLink->save();
-
-    $childNode = Node::create([
+    $childNode = $this->createNode([
       'type' => 'localgov_subsites_page',
-      'title' => $this->randomMachineName(),
-      'uid' => $user->id(),
-      'status' => 1,
     ]);
-    $childNode->save();
-
-    MenuLinkContent::create([
-      'link' => [['uri' => 'entity:node/' . $childNode->id()]],
-      'title' => $childNode->label(),
-      'menu_name' => 'subsites',
-      'parent' => 'menu_link_content:' . $parentMenuLink->uuid(),
-    ])->save();
+    $this->createMenuLinkForNode($childNode, $parentMenuLink);
 
     $this->drupalGet('/node/' . $childNode->id());
+
+    // Check the class for the color scheme is on the body of the child node.
+    $this->assertSession()->elementAttributeContains('xpath', '/body', 'class', 'subsite-extra--color-theme_a');
+  }
+
+  /**
+   * Test that we can set up a guide in a subsite using this module.
+   *
+   * Structure is a single guide page under a guide overview under a subsite
+   * overview.
+   */
+  public function testGuidePage() {
+
+    // "theme_a" is the only value in a fresh install of localgov_subsites.
+    $subsiteNode = $this->createNode([
+      'type' => 'localgov_subsites_overview',
+      'localgov_subsites_theme' => 'theme_a',
+    ]);
+    $subsiteMenuLink = $this->createMenuLinkForNode($subsiteNode);
+
+    $guideOverviewNode = $this->createNode([
+      'type' => 'localgov_guides_overview',
+    ]);
+    $this->createMenuLinkForNode($guideOverviewNode, $subsiteMenuLink);
+
+    $guidePageNode = $this->createNode([
+      'type' => 'localgov_guides_page',
+      'localgov_guides_parent' => $guideOverviewNode->id(),
+    ]);
+
+    $this->drupalGet('/node/' . $guidePageNode->id());
 
     // Check the class for the color scheme is on the body of the child node.
     $this->assertSession()->elementAttributeContains('xpath', '/body', 'class', 'subsite-extra--color-theme_a');

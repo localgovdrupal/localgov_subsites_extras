@@ -8,6 +8,7 @@
 declare(strict_types=1);
 
 use Drupal\node\NodeInterface;
+use Drupal\node\NodeTypeInterface;
 
 include 'localgov_subsites_extras_hooks.inc';
 
@@ -25,7 +26,7 @@ function localgov_subsites_extras_preprocess_html(&$variables) {
   // If the current node is part of a subsite, $subsiteHomePage will be the
   // subsite's homepage node. If it's not, it'll be null.
   $theme = $subSiteService->getCurrentSubsiteTheme();
-  if ($theme) {
+  if (is_string($theme)) {
     $variables['attributes']['class'][] = 'subsite-extra';
     $variables['attributes']['class'][] = 'subsite-extra--color-' . $theme;
   }
@@ -45,7 +46,7 @@ function localgov_subsites_extras_preprocess_menu(&$variables) {
   // If the current node is part of a subsite, $subsiteHomePage will be the
   // subsite's homepage node. If it's not, it'll be null.
   $subsiteHomePage = $subSiteService->getHomePage();
-  if ($subsiteHomePage) {
+  if ($subsiteHomePage instanceof NodeInterface) {
     $variables['subsite_homepage_link'] = $subsiteHomePage->toLink();
   }
 }
@@ -62,12 +63,12 @@ function localgov_subsites_extras_entity_bundle_create($entity_type_id, $bundle)
     return;
   }
 
-  /** @var \Drupal\Node\NodeTypeInterface $type */
+  /** @var \Drupal\node\NodeTypeInterface|null $type */
   $type = \Drupal::entityTypeManager()
     ->getStorage('node_type')
     ->load($bundle);
 
-  if ($type) {
+  if ($type instanceof NodeTypeInterface) {
     $availableMenus = $type->getThirdPartySetting('menu_ui', 'available_menus', ['main']);
     $availableMenus[] = 'subsites';
     $type->setThirdPartySetting('menu_ui', 'available_menus', $availableMenus);

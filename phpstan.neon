@@ -11,5 +11,5 @@ parameters:
     - ../../../core/includes
     - ../../../core/modules
   ignoreErrors:
-    - '#^Unsafe usage of new static#'
-    - '#Dynamic call to static method PHPUnit\\Framework\\.*#'
+    - '#^Dynamic call to static method PHPUnit\\Framework\\.*#'
+    - '#^Access to an undefined property Drupal\\node\\NodeInterface::'

@@ -12,4 +12,4 @@ parameters:
     - ../../../core/modules
   ignoreErrors:
     - '#^Dynamic call to static method PHPUnit\\Framework\\.*#'
-    - '#^Access to an undefined property Drupal\\node\\NodeInterface::'
+    - '#^Access to an undefined property Drupal\\node\\NodeInterface::#'

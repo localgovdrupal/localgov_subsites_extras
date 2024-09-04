@@ -7,6 +7,8 @@
 
 declare(strict_types=1);
 
+use Drupal\node\NodeInterface;
+
 include 'localgov_subsites_extras_hooks.inc';
 
 /**
@@ -71,4 +73,40 @@ function localgov_subsites_extras_entity_bundle_create($entity_type_id, $bundle)
     $type->setThirdPartySetting('menu_ui', 'available_menus', $availableMenus);
     $type->save();
   }
+}
+
+/**
+ * Implements hook_pathauto_alias_alter().
+ *
+ * Prepends Subsite homepage path alias to child page path aliases.
+ */
+function localgov_subsites_extras_pathauto_alias_alter(&$alias, array &$context) {
+
+  if ($context['module'] !== 'node') {
+    return;
+  }
+
+  $src_node = $context['data']['node'];
+  $subsite_home = \Drupal::service('localgov_subsites_extras.service')->getHomePage($src_node);
+  if (!$subsite_home instanceof NodeInterface) {
+    return;
+  }
+
+  $is_child_page = $subsite_home->id() !== $src_node->id();
+  if (!$is_child_page) {
+    return;
+  }
+
+  $subsite_home_path_alias        = $subsite_home->toUrl()->toString();
+  $has_no_subsite_home_path_alias = $subsite_home_path_alias === "/node/{$subsite_home->id()}";
+  if ($has_no_subsite_home_path_alias) {
+    return;
+  }
+
+  $has_subsite_alias_prefix = str_starts_with($alias, $subsite_home_path_alias);
+  if ($has_subsite_alias_prefix) {
+    return;
+  }
+
+  $alias = $subsite_home_path_alias . $alias;
 }

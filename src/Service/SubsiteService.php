@@ -48,10 +48,10 @@ class SubsiteService implements SubsiteServiceInterface {
   /**
    * {@inheritDoc}
    */
-  public function getHomePage(): ?NodeInterface {
+  public function getHomePage(?NodeInterface $node = NULL): ?NodeInterface {
 
     if ($this->searched === FALSE) {
-      $this->subsiteHomePage = $this->findHomePage();
+      $this->subsiteHomePage = $this->findHomePage($node);
       $this->searched = TRUE;
     }
 
@@ -79,7 +79,7 @@ class SubsiteService implements SubsiteServiceInterface {
    * Is the given node a subsite root node?
    */
   private function isSubsiteType(NodeInterface $node): bool {
-    return in_array($node->bundle(), $this->subsiteTypes, TRUE);
+    return in_array($node->bundle(), $this->subsiteTypes, strict: TRUE);
   }
 
   /**

@@ -8,11 +8,14 @@
 /**
  * Implements hook_install().
  */
-function localgov_subsites_extras_install() {
+function localgov_subsites_extras_install($is_syncing) {
+  if ($is_syncing) {
+    return;
+  }
 
   // Add the 'subsites' menu included in this module's config to the existing
   // content types.
-  /** @var \Drupal\Node\NodeTypeInterface[] $types */
+  /** @var \Drupal\node\NodeTypeInterface[] $types */
   $types = \Drupal::entityTypeManager()
     ->getStorage('node_type')
     ->loadMultiple();

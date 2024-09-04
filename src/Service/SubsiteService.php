@@ -40,7 +40,7 @@ class SubsiteService implements SubsiteServiceInterface {
   public function __construct(
     private ConfigFactory $configFactory,
     private EntityTypeManagerInterface $entityTypeManager,
-    private MenuLinkManagerInterface $menuLinkService,
+    private MenuLinkManagerInterface $menuLinkManager,
     private ModuleHandlerInterface $moduleHandler,
     private RouteMatchInterface $routeMatch,
   ) {}
@@ -68,7 +68,7 @@ class SubsiteService implements SubsiteServiceInterface {
     // If the current node is part of a subsite, $subsiteHomePage will be the
     // subsite's homepage node. If it's not, it'll be null.
     $subsiteHomePage = $this->getHomePage();
-    if ($subsiteHomePage) {
+    if ($subsiteHomePage instanceof NodeInterface) {
       return $subsiteHomePage->get($themeField)->value;
     }
 
@@ -91,14 +91,14 @@ class SubsiteService implements SubsiteServiceInterface {
       return $node;
     }
 
-    $result = $this->menuLinkService->loadLinksByRoute('entity.node.canonical', ['node' => $node->id()]);
+    $result = $this->menuLinkManager->loadLinksByRoute('entity.node.canonical', ['node' => $node->id()]);
 
-    if (!empty($result)) {
+    if ($result !== []) {
       $menuLink = reset($result);
       $parentMenuLinkID = $menuLink->getParent();
-      if ($parentMenuLinkID) {
+      if ($parentMenuLinkID !== '') {
         $parentNode = $this->loadNodeForMenuLink($parentMenuLinkID);
-        return $parentNode ? $this->walkMenuTree($parentNode) : NULL;
+        return ($parentNode instanceof NodeInterface) ? $this->walkMenuTree($parentNode) : NULL;
       }
     }
     return NULL;
@@ -108,10 +108,10 @@ class SubsiteService implements SubsiteServiceInterface {
    * Loads the node for the supplied menu link ID.
    */
   private function loadNodeForMenuLink($menuLinkContentID): ?NodeInterface {
-    $menuLink = $this->menuLinkService->createInstance($menuLinkContentID);
+    $menuLink = $this->menuLinkManager->createInstance($menuLinkContentID);
     $pluginDefinition = $menuLink->getPluginDefinition();
 
-    if (!empty($pluginDefinition['route_parameters']['node'])) {
+    if (isset($pluginDefinition['route_parameters']['node'])) {
       $node_id = $pluginDefinition['route_parameters']['node'];
       // Load the nodes we found.
       $node = $this->entityTypeManager

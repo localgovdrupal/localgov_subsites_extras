@@ -51,7 +51,8 @@ class SubsiteService implements SubsiteServiceInterface {
    */
   public function getHomePage(?NodeInterface $node = NULL): ?NodeInterface {
 
-    if ($this->searched === FALSE) {
+    // If a node is passed, don't use the cached result.
+    if ($this->searched === FALSE || $node !== NULL) {
       $this->subsiteHomePage = $this->findHomePage($node);
       $this->searched = TRUE;
     }

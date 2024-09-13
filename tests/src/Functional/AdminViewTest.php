@@ -43,7 +43,7 @@ class AdminViewTest extends BrowserTestBase {
     // menu to new content types.
     $this->assertTrue($moduleInstaller->install(['localgov_step_by_step']));
 
-    // Check that we can add a service landing page to the subsites menu.
+    // Check that we can add a step by step overview to the subsites menu.
     $this->drupalGet('node/add/localgov_step_by_step_overview');
     $this->assertSession()->optionExists('edit-menu-menu-parent', 'subsites:');
   }

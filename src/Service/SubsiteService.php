@@ -7,6 +7,7 @@ namespace Drupal\localgov_subsites_extras\Service;
 use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Menu\MenuLinkInterface;
 use Drupal\Core\Menu\MenuLinkManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\node\NodeInterface;
@@ -85,22 +86,24 @@ class SubsiteService implements SubsiteServiceInterface {
   /**
    * Walks up the menu tree to look for a subsite homepage node.
    */
-  private function walkMenuTree(NodeInterface $node): ?NodeInterface {
+  private function walkMenuTree(MenuLinkInterface $menuLink): ?NodeInterface {
 
-    if ($this->isSubsiteType($node)) {
+    // Get the node associated with this menu link if there is one.
+    // If there is one and it's a subsite homepage, we're done.
+    $node = $this->loadNodeForMenuLink($menuLink);
+    if (($node instanceof NodeInterface) && $this->isSubsiteType($node)) {
       return $node;
     }
 
-    $result = $this->menuLinkManager->loadLinksByRoute('entity.node.canonical', ['node' => $node->id()]);
-
-    if ($result !== []) {
-      $menuLink = reset($result);
-      $parentMenuLinkID = $menuLink->getParent();
-      if ($parentMenuLinkID !== '') {
-        $parentNode = $this->loadNodeForMenuLink($parentMenuLinkID);
-        return ($parentNode instanceof NodeInterface) ? $this->walkMenuTree($parentNode) : NULL;
+    // Otherwise, get the parent link of the current link and try again.
+    $parentMenuLinkID = $menuLink->getParent();
+    if ($parentMenuLinkID !== '') {
+      $parentMenuLink = $this->menuLinkManager->getInstance(['id' => $parentMenuLinkID]);
+      if ($parentMenuLink instanceof MenuLinkInterface) {
+        return $this->walkMenuTree($parentMenuLink);
       }
     }
+
     return NULL;
   }
 
@@ -119,6 +122,19 @@ class SubsiteService implements SubsiteServiceInterface {
         ->load($node_id);
 
       return $node;
+    }
+
+    return NULL;
+  }
+
+  /**
+   * Loads the menu link for the supplied node.
+   */
+  private function loadMenuLinkForNode(NodeInterface $node): ?MenuLinkInterface {
+    $result = $this->menuLinkManager->loadLinksByRoute('entity.node.canonical', ['node' => $node->id()]);
+
+    if ($result !== []) {
+      return reset($result);
     }
 
     return NULL;
@@ -150,7 +166,12 @@ class SubsiteService implements SubsiteServiceInterface {
       $this->subsiteTypes = $subsiteTypes;
     }
 
-    return $this->walkMenuTree($node);
+    $menuLink = $this->loadMenuLinkForNode($node);
+    if ($menuLink instanceof MenuLinkInterface) {
+      $this->walkMenuTree($menuLink);
+    }
+
+    return NULL;
   }
 
 }

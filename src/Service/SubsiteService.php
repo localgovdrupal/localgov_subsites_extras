@@ -168,7 +168,7 @@ class SubsiteService implements SubsiteServiceInterface {
 
     $menuLink = $this->loadMenuLinkForNode($node);
     if ($menuLink instanceof MenuLinkInterface) {
-      $this->walkMenuTree($menuLink);
+      return $this->walkMenuTree($menuLink);
     }
 
     return NULL;

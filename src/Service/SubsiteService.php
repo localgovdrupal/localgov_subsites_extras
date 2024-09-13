@@ -98,7 +98,7 @@ class SubsiteService implements SubsiteServiceInterface {
     // Otherwise, get the parent link of the current link and try again.
     $parentMenuLinkID = $menuLink->getParent();
     if ($parentMenuLinkID !== '') {
-      $parentMenuLink = $this->menuLinkManager->getInstance(['id' => $parentMenuLinkID]);
+      $parentMenuLink = $this->menuLinkManager->createInstance($parentMenuLinkID);
       if ($parentMenuLink instanceof MenuLinkInterface) {
         return $this->walkMenuTree($parentMenuLink);
       }
@@ -110,8 +110,7 @@ class SubsiteService implements SubsiteServiceInterface {
   /**
    * Loads the node for the supplied menu link ID.
    */
-  private function loadNodeForMenuLink($menuLinkContentID): ?NodeInterface {
-    $menuLink = $this->menuLinkManager->createInstance($menuLinkContentID);
+  private function loadNodeForMenuLink($menuLink): ?NodeInterface {
     $pluginDefinition = $menuLink->getPluginDefinition();
 
     if (isset($pluginDefinition['route_parameters']['node'])) {

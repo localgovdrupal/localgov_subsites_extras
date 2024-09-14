@@ -2,7 +2,7 @@ name: "LocalGov Subsites Extras"
 description: "Allows creation of subsites that use the menu system to determine hierarchy."
 package: LocalGov Drupal
 type: module
-core_version_requirement: ^10
+core_version_requirement: ^10 || ^11
 dependencies:
   - drupal:menu_ui
   - drupal:node

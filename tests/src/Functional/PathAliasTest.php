@@ -21,7 +21,7 @@ class PathAliasTest extends BrowserTestBase {
 
     $subsiteHome = $this->getNodeByTitle(self::SUBSITE_HOMEPAGE_TITLE);
     $subsiteChild = $this->getNodeByTitle(self::SUBSITE_CHILDPAGE_TITLE);
-    self::assertStringStartsWith($subsiteHome->url()->toString(), $subsiteChild->url()->toString());
+    self::assertStringStartsWith($subsiteHome->toUrl()->toString(), $subsiteChild->toUrl()->toString());
   }
 
   /**

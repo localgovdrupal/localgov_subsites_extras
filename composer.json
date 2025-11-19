@@ -7,7 +7,7 @@
     "minimum-stability": "dev",
     "require-dev": {
         "drupal/localgov_base": "^2.0",
-        "drupal/localgov_guides": "dev-feature/198-fix-prev-title-error",
+        "localgovdrupal/localgov_guides": "dev-feature/198-fix-prev-title-error as 2.1.18",
         "drupal/localgov_subsites": "^2.0",
         "drupal/localgov_services": "^2.0",
         "drupal/localgov_step_by_step": "^2.1"

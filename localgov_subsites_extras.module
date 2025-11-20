@@ -98,7 +98,9 @@ function localgov_subsites_extras_pathauto_alias_alter(&$alias, array &$context)
     return;
   }
 
-  $subsite_home_path_alias        = $subsite_home->toUrl()->toString();
+  // Get the subsite homepage path alias, not using  toUrl() as that could
+  // cause duplicate sub-directories in the alias.
+  $subsite_home_path_alias = $subsite_home->path->alias;
   $has_no_subsite_home_path_alias = $subsite_home_path_alias === "/node/{$subsite_home->id()}";
   if ($has_no_subsite_home_path_alias) {
     return;

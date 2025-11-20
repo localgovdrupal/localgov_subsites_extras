@@ -17,11 +17,11 @@ class PathAliasTest extends BrowserTestBase {
    * Checks that the Subsite homepage path alias is prepended to child page path
    * aliases.
    */
-  public function testPathAlias() {
+  public function testPathAlias(): void {
 
     $subsiteHome = $this->getNodeByTitle(self::SUBSITE_HOMEPAGE_TITLE);
     $subsiteChild = $this->getNodeByTitle(self::SUBSITE_CHILDPAGE_TITLE);
-    self::assertStringStartsWith($subsiteHome->path->alias, $subsiteChild->path->alias);
+    self::assertStringStartsWith($subsiteHome->toUrl()->toString(), $subsiteChild->toUrl()->toString());
   }
 
   /**

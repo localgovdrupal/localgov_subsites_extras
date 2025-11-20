@@ -4,5 +4,12 @@
     "type": "drupal-module",
     "homepage": "https://github.com/localgovdrupal/localgov_subsites_extras",
     "license": "GPL-2.0-or-later",
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "require-dev": {
+        "drupal/localgov_base": "^2.0",
+        "drupal/localgov_guides": "^2.1",
+        "drupal/localgov_subsites": "^2.0",
+        "drupal/localgov_services": "^2.0",
+        "drupal/localgov_step_by_step": "^2.1"
+    }
 }

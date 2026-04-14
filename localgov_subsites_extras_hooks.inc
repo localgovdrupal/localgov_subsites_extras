@@ -35,11 +35,52 @@ if (!function_exists('localgov_guides_localgov_subsites_extras_current_node_alte
    */
   function localgov_guides_localgov_subsites_extras_current_node_alter(?NodeInterface &$node) {
     if ($node instanceof NodeInterface && $node->hasField('localgov_guides_parent')) {
-      $guideParent = $node->localgov_guides_parent->entity;
-      if ($guideParent instanceof NodeInterface) {
-        $node = $guideParent;
+      $parent = $node->localgov_guides_parent->entity;
+      if ($parent instanceof NodeInterface) {
+        $node = $parent;
       }
     }
   }
 
+}
+
+if (!function_exists('localgov_step_by_step_localgov_subsites_extras_current_node_alter')) {
+
+  /**
+   * Implements hook_localgov_subsites_extras_current_node_alter().
+   */
+  function localgov_step_by_step_localgov_subsites_extras_current_node_alter(?NodeInterface &$node) {
+    if ($node instanceof NodeInterface && $node->hasField('localgov_step_parent')) {
+      $parent = $node->localgov_step_parent->entity;
+      if ($parent instanceof NodeInterface) {
+        $node = $parent;
+      }
+    }
+  }
+
+}
+
+if (!function_exists('localgov_news_localgov_subsites_extras_current_node_alter')) {
+
+  /**
+   * Implements hook_localgov_subsites_extras_current_node_alter().
+   */
+  function localgov_news_localgov_subsites_extras_current_node_alter(?NodeInterface &$node) {
+    if ($node instanceof NodeInterface && $node->hasField('localgov_newsroom')) {
+      $newsRoom = $node->localgov_newsroom->entity;
+      if ($newsRoom instanceof NodeInterface) {
+        $node = $newsRoom;
+      }
+    }
+  }
+
+}
+
+function localgov_publications_localgov_subsites_extras_current_node_alter(?NodeInterface &$node) {
+  if (!$node instanceof NodeInterface) {
+    return;
+  }
+  // @todo
+  // publication page (Use the service to get the book root. Return that if there's no cover page. Return the cover page if there is one.)
+  // publication cover page (Nothing?)
 }

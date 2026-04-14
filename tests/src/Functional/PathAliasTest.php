@@ -17,15 +17,11 @@ class PathAliasTest extends BrowserTestBase {
    * Checks that the Subsite homepage path alias is prepended to child page path
    * aliases.
    */
-  public function testPathAlias() {
+  public function testPathAlias(): void {
 
     $subsiteHome = $this->getNodeByTitle(self::SUBSITE_HOMEPAGE_TITLE);
     $subsiteChild = $this->getNodeByTitle(self::SUBSITE_CHILDPAGE_TITLE);
-    $subsiteHomePathAlias  = $subsiteHome->path?->alias ?? '/something';
-    $subsiteChildPathAlias = $subsiteChild->path?->alias ?? '/completely/different';
-
-    $hasExpectedPathAliasPattern = str_starts_with($subsiteChildPathAlias, $subsiteHomePathAlias);
-    $this->assertTrue($hasExpectedPathAliasPattern, 'Subsite child path alias is prefixed with parent path alias.');
+    self::assertStringStartsWith($subsiteHome->toUrl()->toString(), $subsiteChild->toUrl()->toString());
   }
 
   /**
@@ -47,6 +43,7 @@ class PathAliasTest extends BrowserTestBase {
       'menu_name' => 'subsites',
     ]);
     $subsiteHomeMenuLink->save();
+    $subsiteHome->save();
 
     $subsiteChild = $this->createNode([
       'type'   => 'localgov_services_page',
@@ -64,6 +61,7 @@ class PathAliasTest extends BrowserTestBase {
       'menu_name' => 'subsites',
       'parent'    => 'menu_link_content:' . $subsiteHomeMenuLink->uuid(),
     ])->save();
+    $subsiteChild->save();
   }
 
   const SUBSITE_HOMEPAGE_TITLE  = 'A subsite homepage';
